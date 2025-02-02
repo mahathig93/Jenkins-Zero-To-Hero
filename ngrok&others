@@ -1,0 +1,41 @@
+
+:shell commands:
+:WebHook:
+
+
+:::::::::::::::::::shell commands::::::::::::::::::::::
+
+1. If any shell command is executed from Jenkins script -> Stage -> steps:
+   Need to remember that scope is limited to that step alone. (i.e whatever cd kind-off cmds executed will get reset by Jenkins when execution goes to next execution statement)
+2. To run multiple shell commands at ones, following syntax have to be followed:
+
+                            sh '''
+                            echo "Now in directory:"
+                            cd stage1
+							pwd
+                            ls -la
+                            make test
+                            ls -la 
+                            echo "Building done"
+                            '''
+
+:::::::::::::::::::::WebHook::::::::::::::::::::
+0. Purpose of this: On commit trigger of Jenkins Job.
+
+1. Webhook expects, Jenkins url to be reachable as it does internally ping to the Jenkins service. 
+   So, when configuring the GITHUB with webhook we need to ensure Jenkins url is pingable from internet (or) we need to 
+   expose the jenkins url to public domain.
+2. Utility used to the exposing the local jenkings url to public is done through "ngrok"
+3. "ngrok": Need to signup for this, follow the  install steps given in the website. 
+    CMD: ngrok http url:8080 
+4. On the GITHUB, Navigation for configuring the webhook:
+   Settings -> WebHook -> Add Webhook -> Payload Url:
+     <Jenkinsurl>/github-webhook/
+
+   Verify: Goback to Settings -> Webhook -> We need to see Tick Mark comming on the WebHOok added. 
+           If not: Ensure, Jenkins url is accessible from internet.
+                   Encourage Deleting the existing WebHook and Adding NewOne instead of editing.		   
+	 
+5. Navigation On Jenkins:
+   Goto Pipline -> configure -> General Settings -> 
+   Check Mark Web Hook related option.
